@@ -1,17 +1,35 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  SafeAreaView,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native";
 import RegistrationScreen from "./src/screens/RegistrationScreen";
 import MyForm from "./src/screens/LoginScreen";
+import PostsScreen from "./src/screens/PostsScreen";
 
 export default function App() {
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
+    // метод для закр клавиат по клику
+    Keyboard.dismiss();
+  };
   return (
-    <View style={styles.container}>
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
-      {/* <StatusBar style="auto" /> */}
-      <RegistrationScreen />
-      {/* <MyForm /> */}
-    </View>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View style={styles.container}>
+        {/* <Text>Open up App.js to start working on your app!</Text> */}
+        {/* <StatusBar style="auto" /> */}
+        <RegistrationScreen />
+        {/* <PostsScreen/> */}
+        {/* <MyForm /> */}
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
