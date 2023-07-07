@@ -44,7 +44,7 @@ export default RegistrationScreen = ({
         <View
           style={{
             ...styles.form,
-            paddingBottom: isShowKeyboard ? 150 : 45,
+            marginBottom: isShowKeyboard ? 100 : 0,
           }}
           // style={styles.form}
         >
@@ -116,14 +116,13 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
 
     // alignItems: "center",
-    position: "relative",
   },
 
   form: {
     // borderTopEndRadius: 10,
     // marginHorizontal: 40,
     // ? це для відступів, коли виїзджає клаватура
-    paddingBottom: 150,
+    paddingBottom: 45,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingTop: 93,

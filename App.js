@@ -1,5 +1,5 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useFonts } from "expo-font";
 import {
   ImageBackground,
   StyleSheet,
@@ -12,33 +12,37 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import RegistrationScreen from "./src/screens/RegistrationScreen";
-import MyForm from "./src/screens/LoginScreen";
 import PostsScreen from "./src/screens/PostsScreen";
-import LoginScreen from "./src/screens/LoginScreen";
 // import background from "./assets/images/background.jpg";
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    "Inter-Black": require("./assets/fonts/Inter-Black.otf"),
+  });
+
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
-    // метод для закр клавиат по клику
     Keyboard.dismiss();
     console.log("IsShowKeyboard", isShowKeyboard);
   };
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
+        {/* <Text style={styles.text}>
+          Open up App.js to start working on your app!
+        </Text> */}
         <RegistrationScreen
           isShowKeyboard={isShowKeyboard}
           setIsShowKeyboard={setIsShowKeyboard}
           keyboardHide={keyboardHide}
         />
-        {/* <LoginScreen
-          isShowKeyboard={isShowKeyboard}
-          setIsShowKeyboard={setIsShowKeyboard}
-          keyboardHide={keyboardHide}
-        /> */}
-        {/* <PostsScreen/> */}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -48,17 +52,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    // alignItems: "center",
-    // justifyContent: "center",
   },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-    position: "relative",
+  text: {
+    fontFamily: "Inter-Black",
+    fontSize: 30,
   },
 });
-
 // import { StatusBar } from "expo-status-bar";
 // // import { useState } from "react";
 // // import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
