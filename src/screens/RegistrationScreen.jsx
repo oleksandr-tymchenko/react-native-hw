@@ -16,95 +16,101 @@ import {
 import background from "../../assets/images/background.jpg";
 import add from "../../assets/images/add.png";
 
-export default RegistrationScreen = () => {
-  // console.log(Platform.OS);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    // метод для закр клавиат по клику
-    Keyboard.dismiss();
+export default RegistrationScreen = ({
+  isShowKeyboard,
+  setIsShowKeyboard,
+  keyboardHide,
+}) => {
+  const [isFocusedInput, setIsFocusedInput] = useState(null);
+  console.log("IsShowKeyboard start", isShowKeyboard);
+
+  const handleFocus = (key) => {
+    setIsShowKeyboard(true);
+    setIsFocusedInput(key);
   };
+  const handleBlur = () => {
+    setIsFocusedInput(null);
+  };
+
   return (
-    // <SafeAreaView style={styles.container}>
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <ImageBackground
-        source={background}
-        // resizeMode="contain"
-        style={styles.image}
+    <ImageBackground
+      source={background}
+      resizeMode="cover"
+      style={styles.image}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
-          {/* <View style={styles.formWrap}> */}
-          <View
-            style={{
-              ...styles.form,
-              paddingBottom: isShowKeyboard ? 0 : 45,
-              // marginTop: isShowKeyboard ? 103 : 0,
-            }}
-            // style={styles.form}
-          >
-            <View style={styles.acauntImgWrap}>
-              <Image />
-            </View>
-            <Image style={styles.addImg} source={add} />
-            <Text style={styles.formTitle}>Реєстрація</Text>
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder="Логін"
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-            </View>
-            <View style={{ marginTop: 16 }}>
-              <TextInput
-                style={styles.input}
-                placeholder="Адреса електронної пошти"
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-            </View>
-            <View style={{ marginTop: 16, position: "relative" }}>
-              <TextInput
-                style={styles.input}
-                placeholder="Пароль"
-                secureTextEntry={true}
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-              <TouchableOpacity style={styles.showPasswordBtn}>
-                <Text style={styles.passwordText}>Показати</Text>
-              </TouchableOpacity>
-            </View>
-            {/* <Button title="SIGN IN" /> */}
-
-            <TouchableOpacity
-              style={styles.btn}
-              activeOpacity={0.8}
-              onPress={keyboardHide}
-            >
-              <Text style={styles.btnTitle}>Зареєструватися</Text>
-            </TouchableOpacity>
-
-            <Text style={styles.formText}>Вже є акаунт? Увійти</Text>
+        <View
+          style={{
+            ...styles.form,
+            paddingBottom: isShowKeyboard ? 150 : 45,
+          }}
+          // style={styles.form}
+        >
+          <View style={styles.acauntImgWrap}>
+            <Image />
           </View>
-          {/* </View> */}
-        </KeyboardAvoidingView>
-      </ImageBackground>
-    </TouchableWithoutFeedback>
-    // </SafeAreaView>
+          <Image style={styles.addImg} source={add} />
+          <Text style={styles.formTitle}>Реєстрація</Text>
+          <View>
+            <TextInput
+              style={[
+                styles.input,
+                isFocusedInput === "input1" ? styles.focusedInput : null,
+              ]}
+              placeholder="Логін"
+              onFocus={() => handleFocus("input1")}
+              onBlur={handleBlur}
+            />
+          </View>
+          <View style={{ marginTop: 16 }}>
+            <TextInput
+              style={[
+                styles.input,
+                isFocusedInput === "input2" ? styles.focusedInput : null,
+              ]}
+              placeholder="Адреса електронної пошти"
+              onFocus={() => handleFocus("input2")}
+              onBlur={handleBlur}
+            />
+          </View>
+          <View style={{ marginTop: 16, position: "relative" }}>
+            <TextInput
+              style={[
+                styles.input,
+                isFocusedInput === "input3" ? styles.focusedInput : null,
+              ]}
+              placeholder="Пароль"
+              secureTextEntry={true}
+              onFocus={() => handleFocus("input3")}
+              onBlur={handleBlur}
+            />
+            <TouchableOpacity style={styles.showPasswordBtn}>
+              <Text style={styles.passwordText}>Показати</Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity
+            style={styles.btn}
+            activeOpacity={0.8}
+            onPress={keyboardHide}
+          >
+            <Text style={styles.btnTitle}>Зареєструватися</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.formText}>Вже є акаунт? Увійти</Text>
+        </View>
+        {/* </View> */}
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   // alignItems: "center",
-  //   // justifyContent: "center",
-  // },
-  // text: {
-  //   color: "#fff",
-  // },
-
   image: {
     flex: 1,
-    resizeMode: "cover",
+    // resizeMode: "cover",
     justifyContent: "flex-end",
     // width: "100%",
     // justifyContent: "center",
@@ -112,16 +118,12 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     position: "relative",
   },
-  // formWrap: {
-  //   backgroundColor: "#f0f8ff",
-  //   borderTopLeftRadius: 20,
-  //   borderTopRightRadius: 20,
-  // },
+
   form: {
     // borderTopEndRadius: 10,
     // marginHorizontal: 40,
     // ? це для відступів, коли виїзджає клаватура
-    // marginBottom: 100,
+    paddingBottom: 150,
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 16,
     paddingTop: 93,
@@ -171,6 +173,16 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 10,
     color: "#212121",
     backgroundColor: "#E8E8E8",
+  },
+  focusedInput: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#f0f8ff",
+
+    borderRadius: 5,
+    height: 50,
+    backgroundColor: "#FFFFFF",
+    borderColor: "#FF6C00",
   },
 
   showPasswordBtn: {
