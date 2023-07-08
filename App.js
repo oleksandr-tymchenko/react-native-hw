@@ -13,38 +13,28 @@ import {
 } from "react-native";
 import RegistrationScreen from "./src/screens/RegistrationScreen";
 import PostsScreen from "./src/screens/PostsScreen";
+import LoginScreen from "./src/screens/LoginScreen";
 // import background from "./assets/images/background.jpg";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
     "Inter-Black": require("./assets/fonts/Inter-Black.otf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
   });
-
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-    console.log("IsShowKeyboard", isShowKeyboard);
-  };
 
   if (!fontsLoaded) {
     return null;
   }
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
-        {/* <Text style={styles.text}>
-          Open up App.js to start working on your app!
-        </Text> */}
-        <RegistrationScreen
-          isShowKeyboard={isShowKeyboard}
-          setIsShowKeyboard={setIsShowKeyboard}
-          keyboardHide={keyboardHide}
-        />
-      </View>
-    </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      {/* <RegistrationScreen /> */}
+      <LoginScreen />
+
+      {/* <PostsScreen /> */}
+    </View>
   );
 }
 
@@ -54,13 +44,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   text: {
-    fontFamily: "Inter-Black",
+    fontFamily: "Roboto-Regular",
     fontSize: 30,
   },
 });
-// import { StatusBar } from "expo-status-bar";
-// // import { useState } from "react";
-// // import { StyleSheet, Text, View, ScrollView, SafeAreaView } from "react-native";
 // import React, { useState } from "react";
 // import {
 //   ImageBackground,
