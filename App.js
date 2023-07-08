@@ -1,24 +1,17 @@
-import { useState, useCallback } from "react";
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 import { useFonts } from "expo-font";
-import {
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  SafeAreaView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  KeyboardAvoidingView,
-} from "react-native";
-import RegistrationScreen from "./src/screens/RegistrationScreen";
+import RegistrationScreen from "./src/screens/Auth/RegistrationScreen";
 import PostsScreen from "./src/screens/PostsScreen";
-import LoginScreen from "./src/screens/LoginScreen";
-// import background from "./assets/images/background.jpg";
+import LoginScreen from "./src/screens/Auth/LoginScreen";
+import TestingScreen from "./src/screens/TestingScreen";
+
+const MainStack = createStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Inter-Black": require("./assets/fonts/Inter-Black.otf"),
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
@@ -29,25 +22,30 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      {/* <RegistrationScreen /> */}
-      <LoginScreen />
+    <NavigationContainer>
+      <MainStack.Navigator>
+        <MainStack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="Register"
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
 
-      {/* <PostsScreen /> */}
-    </View>
+        {/* <RegistrationScreen /> */}
+        {/* <LoginScreen /> */}
+        {/* <TestingScreen/> */}
+        {/* <PostsScreen /> */}
+        {/* // <MainStack.Screen name="TestingScreen" component={<TestingScreen />} /> */}
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  text: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 30,
-  },
-});
+// !111111111111111111111
 // import React, { useState } from "react";
 // import {
 //   ImageBackground,
