@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Button,
 } from "react-native";
+import validator from "validator";
 import background from "../../../assets/images/background.jpg";
 import add from "../../../assets/images/add.png";
 import { useNavigation } from "@react-navigation/native";
@@ -26,11 +27,16 @@ const initialState = {
 
 export default RegistrationScreen = () => {
   const navigation = useNavigation();
-
+  const [isValid, setIsValid] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
+  const validEmail = (value) => {
+    const isValidEmail = validator.isEmail(value);
+    setIsValid(isValidEmail);
+  };
   const keyboardHide = () => {
+    if (!isValid && state.email.length > 0) return;
     setIsShowKeyboard(false);
     Keyboard.dismiss();
 
@@ -96,10 +102,14 @@ export default RegistrationScreen = () => {
                   onFocus={() => handleFocus("input2")}
                   onBlur={handleBlur}
                   value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  onChangeText={(value) => {
+                    setState((prevState) => ({ ...prevState, email: value }));
+                    validEmail(value);
+                  }}
                 />
+                {!isValid && state.email.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>Email is not valid</Text>
+                )}
               </View>
               <View style={{ marginTop: 16, position: "relative" }}>
                 <TextInput

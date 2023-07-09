@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   Button,
 } from "react-native";
+import validator from "validator";
 
 import background from "../../../assets/images/background.jpg";
 import { useNavigation } from "@react-navigation/native";
@@ -25,11 +26,20 @@ const initialState = {
 
 export default LoginScreen = () => {
   const navigation = useNavigation();
+
+  const [isValid, setIsValid] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
   const [state, setState] = useState(initialState);
+  const validEmail = (value) => {
+    const isValidEmail = validator.isEmail(value);
+    setIsValid(isValidEmail);
+  };
   const keyboardHide = () => {
+    if (!isValid && state.email.length > 0) return;
+
     setIsShowKeyboard(false);
+
     Keyboard.dismiss();
     if (state !== initialState) {
       console.log(state);
@@ -53,16 +63,11 @@ export default LoginScreen = () => {
           resizeMode="cover"
           style={styles.image}
         >
-          {/* <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      > */}
           <View
             style={{
               ...styles.form,
               paddingBottom: isShowKeyboard ? 120 : 80,
-              //   marginBottom: isShowKeyboard ? 200 : 0,
             }}
-            //   style={styles.form}
           >
             <Text style={styles.formTitle}>Увійти</Text>
             <KeyboardAvoidingView
@@ -78,10 +83,15 @@ export default LoginScreen = () => {
                   onFocus={() => handleFocus("input2")}
                   onBlur={handleBlur}
                   value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
+                  onChangeText={(value) => {
+                    setState((prevState) => ({ ...prevState, email: value }));
+                    validEmail(value);
+                  }}
                 />
+
+                {!isValid && state.email.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>Email is not valid</Text>
+                )}
               </View>
               <View style={{ marginTop: 16, position: "relative" }}>
                 <TextInput
