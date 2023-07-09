@@ -1,14 +1,7 @@
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
 import { useFonts } from "expo-font";
-import RegistrationScreen from "./src/screens/Auth/RegistrationScreen";
-import PostsScreen from "./src/screens/PostsScreen";
-import LoginScreen from "./src/screens/Auth/LoginScreen";
-import TestingScreen from "./src/screens/TestingScreen";
-
-const MainStack = createStackNavigator();
+import { useRoute } from "./router";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,29 +13,8 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
-  return (
-    <NavigationContainer>
-      <MainStack.Navigator>
-        <MainStack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <MainStack.Screen
-          name="Register"
-          component={RegistrationScreen}
-          options={{ headerShown: false }}
-        />
-
-        {/* <RegistrationScreen /> */}
-        {/* <LoginScreen /> */}
-        {/* <TestingScreen/> */}
-        {/* <PostsScreen /> */}
-        {/* // <MainStack.Screen name="TestingScreen" component={<TestingScreen />} /> */}
-      </MainStack.Navigator>
-    </NavigationContainer>
-  );
+  const routing = useRoute(true);
+  return <NavigationContainer>{routing}</NavigationContainer>;
 }
 
 // !111111111111111111111

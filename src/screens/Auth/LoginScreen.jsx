@@ -116,7 +116,13 @@ export default LoginScreen = () => {
               <TouchableOpacity
                 style={styles.btn}
                 activeOpacity={0.8}
-                onPress={keyboardHide}
+                // onPress={keyboardHide}
+                onPress={() => {
+                  navigation.navigate("Home", {
+                    screen: "Posts",
+                    params: { userId: `${state.email}` },
+                  });
+                }}
               >
                 <Text style={styles.btnTitle}>Увійти</Text>
               </TouchableOpacity>
