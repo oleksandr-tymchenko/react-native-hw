@@ -19,7 +19,7 @@ styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#FFFFFF",
-    // justifyContent: "center",
+
     alignItems: "flex-start",
   },
   userWrap: {

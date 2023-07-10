@@ -17,7 +17,10 @@ const HomeScreen = () => {
     <MainTab.Navigator
       // screenOptions={{ tabBarLabel: () => false }}
       screenOptions={({ route }) => ({
-        tabBarStyle: { alignItems: "stretch" },
+        // tabBarStyle: { alignItems: "stretch" },
+        tabBarActiveTintColor: "#FF6C00",
+        tabBarInactiveTintColor: "#212121",
+        // tabBarItemStyle: { justifyContent: "center" },
         tabBarLabel: () => false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -32,11 +35,6 @@ const HomeScreen = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
-      tabBarOptions={{
-        // justifyContent: "spa",
-        activeTintColor: "#FF6C00",
-        inactiveTintColor: "#212121",
-      }}
     >
       <MainTab.Screen
         name="Post"
@@ -52,7 +50,7 @@ const HomeScreen = () => {
                 activeOpacity={0.8}
                 // onPress={keyboardHide}
                 onPress={() => {
-                  // navigation.navigate("Home");
+                  // navigation.navigate("Home")
                 }}
               >
                 <Ionicons
