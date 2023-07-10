@@ -44,7 +44,7 @@ const HomeScreen = () => {
         // options={{ headerShown: false }}
         options={{
           title: "Публікації",
-
+          headerStyle: { borderBottomColor: "#BDBDBD", borderWidth: 1 },
           headerRight: () => (
             <View>
               <TouchableOpacity
@@ -52,7 +52,7 @@ const HomeScreen = () => {
                 activeOpacity={0.8}
                 // onPress={keyboardHide}
                 onPress={() => {
-                  navigation.navigate("Home");
+                  // navigation.navigate("Home");
                 }}
               >
                 <Ionicons

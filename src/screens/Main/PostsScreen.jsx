@@ -11,12 +11,9 @@ const PostsScreen = () => {
           <Text style={styles.userEmail}>email@google.com</Text>
         </View>
       </View>
-
-      {/* <Text>PostsScreen</Text> */}
     </View>
   );
 };
-
 styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -30,13 +27,14 @@ styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
   },
+  userInfo: {
+    flexDirection: "column",
+  },
   userImg: {
     width: 60,
     marginRight: 10,
   },
-  userInfo: {
-    flexDirection: "column",
-  },
+
   userName: {
     fontFamily: "Roboto-Bold",
     fontSize: 13,
