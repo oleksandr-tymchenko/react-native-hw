@@ -2,15 +2,26 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import PostsScreen from "./PostsScreen";
 import CreatePostScreen from "./CreatePostScreen";
 import ProfileScreen from "./ProfileScreen";
-import { useRoute } from "@react-navigation/native";
 
 const MainTab = createBottomTabNavigator();
-
-// !!!!!!!!!!!!!!!!!
+// const AddTab = createStackNavigator();
+// const CreatePostStack = () => (
+//   <AddTab.Navigator>
+//     <AddTab.Screen
+// name="CreatePost"
+// component={CreatePostScreen}
+//       options={{ headerShown: false }}
+//     />
+//   </AddTab.Navigator>
+// );
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const route = useRoute();
 
   return (
@@ -22,6 +33,7 @@ const HomeScreen = () => {
         tabBarInactiveTintColor: "#212121",
         // tabBarItemStyle: { justifyContent: "center" },
         tabBarLabel: () => false,
+
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
@@ -39,29 +51,7 @@ const HomeScreen = () => {
       <MainTab.Screen
         name="Post"
         component={PostsScreen}
-        // options={{ headerShown: false }}
-        options={{
-          title: "Публікації",
-          headerStyle: { borderBottomColor: "#BDBDBD", borderWidth: 1 },
-          headerRight: () => (
-            <View>
-              <TouchableOpacity
-                style={{ marginRight: 10 }}
-                activeOpacity={0.8}
-                // onPress={keyboardHide}
-                onPress={() => {
-                  // navigation.navigate("Home")
-                }}
-              >
-                <Ionicons
-                  name={"log-out-outline"}
-                  style={{ fontSize: 30, color: "#BDBDBD" }} // Змінити розмір іконки на 30
-                />
-                {/* <Text style={styles.btnTitle}>Увійти</Text> */}
-              </TouchableOpacity>
-            </View>
-          ),
-        }}
+        options={{ headerShown: false }}
       />
       <MainTab.Screen
         name="CreatePost"

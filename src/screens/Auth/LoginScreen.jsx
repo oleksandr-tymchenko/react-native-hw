@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
   View,
@@ -12,7 +11,6 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Button,
 } from "react-native";
 import validator from "validator";
 
@@ -27,24 +25,32 @@ const initialState = {
 export default LoginScreen = () => {
   const navigation = useNavigation();
 
+  const [state, setState] = useState(initialState);
   const [isValid, setIsValid] = useState(false);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
-  const [state, setState] = useState(initialState);
-  const validEmail = (value) => {
-    const isValidEmail = validator.isEmail(value);
-    setIsValid(isValidEmail);
+  const [secureText, setSecureText] = useState(true);
+
+  const validateForm = () => {
+    const { email, password } = state;
+    const isValidEmail = validator.isEmail(email);
+    const isValidPassword = password.trim().length >= 8;
+    // const isValidPassword = validator.isAlphanumeric(password)
+    setIsValid(isValidEmail && isValidPassword);
   };
+  useEffect(() => {
+    validateForm();
+  }, [state.email, state.password]);
+
   const keyboardHide = () => {
     if (!isValid && state.email.length > 0) return;
 
     setIsShowKeyboard(false);
 
     Keyboard.dismiss();
-    if (state !== initialState) {
-      console.log(state);
-      setState(initialState);
-    }
+    // if (state !== initialState) {
+    //   setState(initialState);
+    // }
   };
 
   const handleFocus = (key) => {
@@ -85,12 +91,14 @@ export default LoginScreen = () => {
                   value={state.email}
                   onChangeText={(value) => {
                     setState((prevState) => ({ ...prevState, email: value }));
-                    validEmail(value);
+                    // validEmail(value);
                   }}
                 />
 
-                {!isValid && state.email.length > 0 && (
-                  <Text style={{ color: `#ff0000` }}>Email is not valid</Text>
+                {state.email.length > 0 && !validator.isEmail(state.email) && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Поле Email заповнено не коректно
+                  </Text>
                 )}
               </View>
               <View style={{ marginTop: 16, position: "relative" }}>
@@ -109,13 +117,27 @@ export default LoginScreen = () => {
                   }
                 />
                 <TouchableOpacity style={styles.showPasswordBtn}>
-                  <Text style={styles.passwordText}>Показати</Text>
+                  <Text
+                    style={styles.passwordText}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    Показати
+                  </Text>
                 </TouchableOpacity>
+                {state.password.length < 8 && state.password.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Пароль має містити не менше 8 символів
+                  </Text>
+                )}
               </View>
 
               <TouchableOpacity
-                style={styles.btn}
+                style={[
+                  styles.btn,
+                  { backgroundColor: !isValid ? "#F6F6F6" : "#FF6C00" },
+                ]}
                 activeOpacity={0.8}
+                disabled={!isValid}
                 // onPress={keyboardHide}
                 onPress={() => {
                   navigation.navigate("Home", {
@@ -124,13 +146,20 @@ export default LoginScreen = () => {
                   });
                 }}
               >
-                <Text style={styles.btnTitle}>Увійти</Text>
+                <Text
+                  style={[
+                    styles.btnTitle,
+                    { color: !isValid ? "#BDBDBD" : "#FFFFFF" },
+                  ]}
+                >
+                  Увійти
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
                 style={styles.navLink}
                 onPress={() => navigation.navigate("Register")}
-                activeOpacity={0.5}
+                activeOpacity={0.8}
               >
                 <Text style={styles.navLinkText}>
                   Немає акаунту?{" "}

@@ -7,8 +7,8 @@ import LoginScreen from "./src/screens/Auth/LoginScreen";
 import HomeScreen from "./src/screens/Main/HomeScreen";
 import PostsScreen from "./src/screens/Main/PostsScreen";
 import CreatePostScreen from "./src/screens/Main/CreatePostScreen";
-import CommentsScreen from "./src/screens/Main/CommentsScreen";
-import MapScreen from "./src/screens/Main/MapScreen";
+import CommentsScreen from "./src/screens/RestedScreens/CommentsScreen";
+import MapScreen from "./src/screens/RestedScreens/MapScreen";
 import ProfileScreen from "./src/screens/Main/ProfileScreen";
 import TestingScreen from "./src/screens/TestingScreen";
 

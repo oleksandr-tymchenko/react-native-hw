@@ -26,23 +26,38 @@ const initialState = {
 
 export default RegistrationScreen = () => {
   const navigation = useNavigation();
-  const [isValid, setIsValid] = useState(false);
+  // const [isValidEmail, setIsValidEmail] = useState(false);
+  const [secureText, setSecureText] = useState(true);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
-  const validEmail = (value) => {
-    const isValidEmail = validator.isEmail(value);
-    setIsValid(isValidEmail);
+  const [isValid, setIsValid] = useState(false);
+
+  const validateForm = () => {
+    const { name, email, password } = state;
+    const isValidName = name.trim().length >= 4;
+    const isValidEmail = validator.isEmail(email);
+    const isValidPassword = password.trim().length >= 8;
+    // const isValidPassword = validator.isAlphanumeric(password)
+    setIsValid(isValidName && isValidEmail && isValidPassword);
   };
+  useEffect(() => {
+    validateForm();
+  }, [state.name, state.email, state.password]);
+  // const validEmail = (value) => {
+  //   const email = validator.isEmail(value);
+
+  //   setIsValidEmail(email);
+  // };
   const keyboardHide = () => {
     if (!isValid && state.email.length > 0) return;
     setIsShowKeyboard(false);
     Keyboard.dismiss();
 
-    if (state !== initialState) {
-      console.log(state);
-      setState(initialState);
-    }
+    // if (state !== initialState) {
+    //   console.log(state);
+    //   setState(initialState);
+    // }
   };
   const handleFocus = (key) => {
     setIsShowKeyboard(true);
@@ -90,6 +105,11 @@ export default RegistrationScreen = () => {
                     setState((prevState) => ({ ...prevState, name: value }))
                   }
                 />
+                {state.name.length > 0 && state.name.length < 4 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Логін має містити не менше 4 символів
+                  </Text>
+                )}
               </View>
               <View style={{ marginTop: 16 }}>
                 <TextInput
@@ -103,11 +123,13 @@ export default RegistrationScreen = () => {
                   value={state.email}
                   onChangeText={(value) => {
                     setState((prevState) => ({ ...prevState, email: value }));
-                    validEmail(value);
+                    // validEmail(value);
                   }}
                 />
-                {!isValid && state.email.length > 0 && (
-                  <Text style={{ color: `#ff0000` }}>Email is not valid</Text>
+                {state.email.length > 0 && !validator.isEmail(state.email) && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Поле Email заповнено не коректно
+                  </Text>
                 )}
               </View>
               <View style={{ marginTop: 16, position: "relative" }}>
@@ -117,7 +139,7 @@ export default RegistrationScreen = () => {
                     isFocusedInput === "input3" ? styles.focusedInput : null,
                   ]}
                   placeholder="Пароль"
-                  secureTextEntry={true}
+                  secureTextEntry={secureText}
                   onFocus={() => handleFocus("input3")}
                   onBlur={handleBlur}
                   value={state.password}
@@ -126,13 +148,27 @@ export default RegistrationScreen = () => {
                   }
                 />
                 <TouchableOpacity style={styles.showPasswordBtn}>
-                  <Text style={styles.passwordText}>Показати</Text>
+                  <Text
+                    style={styles.passwordText}
+                    onPress={() => setSecureText(!secureText)}
+                  >
+                    Показати
+                  </Text>
                 </TouchableOpacity>
+                {state.password.length < 8 && state.password.length > 0 && (
+                  <Text style={{ color: `#ff0000` }}>
+                    Пароль має містити не менше 8 символів
+                  </Text>
+                )}
               </View>
 
               <TouchableOpacity
-                style={styles.btn}
+                style={[
+                  styles.btn,
+                  { backgroundColor: !isValid ? "#F6F6F6" : "#FF6C00" },
+                ]}
                 activeOpacity={0.8}
+                disabled={!isValid}
                 // onPress={keyboardHide}
                 onPress={() => {
                   navigation.navigate("Home", {
@@ -141,7 +177,14 @@ export default RegistrationScreen = () => {
                   });
                 }}
               >
-                <Text style={styles.btnTitle}>Зареєструватися</Text>
+                <Text
+                  style={[
+                    styles.btnTitle,
+                    { color: !isValid ? "#BDBDBD" : "#FFFFFF" },
+                  ]}
+                >
+                  Зареєструватися
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
