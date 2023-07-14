@@ -11,9 +11,9 @@ import user from "../../../assets/images/User.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
-const DefaultPostsScreen = () => {
+const DefaultPostsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const route = useRoute();
+  // const route = useRoute();
   const [posts, setPosts] = useState([]);
   useEffect(() => {
     if (route.params) {

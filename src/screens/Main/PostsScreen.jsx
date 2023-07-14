@@ -109,28 +109,28 @@ import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import CommentsScreen from "../RestedScreens/CommentsScreen";
-import MapScreen from "../RestedScreens/MapScreen";
-import DefaultPostsScreen from "../RestedScreens/DefaultPostsScreen";
+import CommentsScreen from "../NestedScreens/CommentsScreen";
+import MapScreen from "../NestedScreens/MapScreen";
+import DefaultPostsScreen from "../NestedScreens/DefaultPostsScreen";
 import CreatePostScreen from "./CreatePostScreen";
 
-const ResteredStack = createStackNavigator();
+const nestedStack = createStackNavigator();
 
 const PostsScreen = () => {
   const navigation = useNavigation();
   return (
-    <ResteredStack.Navigator initialRouteName="DefaultPosts">
-      <ResteredStack.Screen
+    <nestedStack.Navigator initialRouteName="DefaultPosts">
+      <nestedStack.Screen
         name="Map"
         component={MapScreen}
         // options={{ headerShown: false }}
       />
-      <ResteredStack.Screen
+      <nestedStack.Screen
         name="Comments"
         component={CommentsScreen}
         // options={{ headerShown: false }}
       />
-      <ResteredStack.Screen
+      <nestedStack.Screen
         name="DefaultPosts"
         component={DefaultPostsScreen}
         // options={{ headerShown: false }}
@@ -158,7 +158,7 @@ const PostsScreen = () => {
         }}
         // options={{ headerShown: false }}
       />
-    </ResteredStack.Navigator>
+    </nestedStack.Navigator>
   );
 };
 export default PostsScreen;
