@@ -1,3 +1,64 @@
+import React, { useState } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+
+import { View } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import CommentsScreen from "../NestedScreens/CommentsScreen";
+import MapScreen from "../NestedScreens/MapScreen";
+import DefaultPostsScreen from "../NestedScreens/DefaultPostsScreen";
+import CreatePostScreen from "./CreatePostScreen";
+
+const nestedStack = createStackNavigator();
+
+const PostsScreen = () => {
+  const navigation = useNavigation();
+  return (
+    <nestedStack.Navigator initialRouteName="DefaultPosts">
+      <nestedStack.Screen
+        name="DefaultPosts"
+        component={DefaultPostsScreen}
+        // options={{ headerShown: false }}
+        options={{
+          title: "Публікації",
+          headerStyle: { borderBottomColor: "#BDBDBD", borderWidth: 1 },
+          headerRight: () => (
+            <View>
+              <TouchableOpacity
+                style={{ marginRight: 10 }}
+                activeOpacity={0.8}
+                // onPress={keyboardHide}
+                onPress={() => {
+                  navigation.navigate("Login");
+                }}
+              >
+                <Ionicons
+                  name={"log-out-outline"}
+                  style={{ fontSize: 30, color: "#BDBDBD" }} // Змінити розмір іконки на 30
+                />
+                {/* <Text style={styles.btnTitle}>Увійти</Text> */}
+              </TouchableOpacity>
+            </View>
+          ),
+        }}
+        // options={{ headerShown: false }}
+      />
+      <nestedStack.Screen
+        name="Map"
+        component={MapScreen}
+        // options={{ headerShown: false }}
+      />
+      <nestedStack.Screen
+        name="Comments"
+        component={CommentsScreen}
+        // options={{ headerShown: false }}
+      />
+    </nestedStack.Navigator>
+  );
+};
+export default PostsScreen;
+
 // import React, { useEffect, useState } from "react";
 // import {
 //   Text,
@@ -102,63 +163,3 @@
 //   },
 // });
 // export default PostsScreen;
-import React, { useState } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import { View } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import CommentsScreen from "../NestedScreens/CommentsScreen";
-import MapScreen from "../NestedScreens/MapScreen";
-import DefaultPostsScreen from "../NestedScreens/DefaultPostsScreen";
-import CreatePostScreen from "./CreatePostScreen";
-
-const nestedStack = createStackNavigator();
-
-const PostsScreen = () => {
-  const navigation = useNavigation();
-  return (
-    <nestedStack.Navigator initialRouteName="DefaultPosts">
-      <nestedStack.Screen
-        name="Map"
-        component={MapScreen}
-        // options={{ headerShown: false }}
-      />
-      <nestedStack.Screen
-        name="Comments"
-        component={CommentsScreen}
-        // options={{ headerShown: false }}
-      />
-      <nestedStack.Screen
-        name="DefaultPosts"
-        component={DefaultPostsScreen}
-        // options={{ headerShown: false }}
-        options={{
-          title: "Публікації",
-          headerStyle: { borderBottomColor: "#BDBDBD", borderWidth: 1 },
-          headerRight: () => (
-            <View>
-              <TouchableOpacity
-                style={{ marginRight: 10 }}
-                activeOpacity={0.8}
-                // onPress={keyboardHide}
-                onPress={() => {
-                  navigation.navigate("Login");
-                }}
-              >
-                <Ionicons
-                  name={"log-out-outline"}
-                  style={{ fontSize: 30, color: "#BDBDBD" }} // Змінити розмір іконки на 30
-                />
-                {/* <Text style={styles.btnTitle}>Увійти</Text> */}
-              </TouchableOpacity>
-            </View>
-          ),
-        }}
-        // options={{ headerShown: false }}
-      />
-    </nestedStack.Navigator>
-  );
-};
-export default PostsScreen;
