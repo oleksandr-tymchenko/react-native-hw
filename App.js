@@ -1,9 +1,19 @@
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
+// import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-import { useRoute } from "./router";
+
+import { Provider } from "react-redux";
+import { store } from "./Redux/Store";
+import Main from "./Components/Main";
 
 export default function App() {
+  // onAuthStateChanged((credentials) => console.log("user change", credentials));
+  // const authStateChanged = async (onChange = () => {}) => {
+  //   onAuthStateChanged((user) => {
+  //     onChange(user);
+  //     console.log("onChange user", user);
+  //   });
+  // };
+  // authStateChanged();
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -13,8 +23,12 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-  const routing = useRoute(true);
-  return <NavigationContainer>{routing}</NavigationContainer>;
+
+  return (
+    <Provider store={store}>
+      <Main />
+    </Provider>
+  );
 }
 
 // !111111111111111111111

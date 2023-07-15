@@ -16,6 +16,8 @@ import validator from "validator";
 
 import background from "../../../assets/images/background.jpg";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../../Redux/Auth/authOperations";
 
 const initialState = {
   email: "",
@@ -23,6 +25,7 @@ const initialState = {
 };
 
 export default LoginScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [state, setState] = useState(initialState);
@@ -43,14 +46,20 @@ export default LoginScreen = () => {
   }, [state.email, state.password]);
 
   const keyboardHide = () => {
-    if (!isValid && state.email.length > 0) return;
+    // if (!isValid && state.email.length > 0) return;
 
     setIsShowKeyboard(false);
 
     Keyboard.dismiss();
-    // if (state !== initialState) {
-    //   setState(initialState);
-    // }
+    // // if (state !== initialState) {
+    // //   setState(initialState);
+    // // }
+  };
+  const handleSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    dispatch(authSignInUser(state));
+    setState(initialState);
   };
 
   const handleFocus = (key) => {
@@ -138,13 +147,13 @@ export default LoginScreen = () => {
                 ]}
                 activeOpacity={0.8}
                 disabled={!isValid}
-                // onPress={keyboardHide}
-                onPress={() => {
-                  navigation.navigate("Home", {
-                    screen: "Posts",
-                    params: { userId: `${state.email}` },
-                  });
-                }}
+                onPress={handleSubmit}
+                // onPress={() => {
+                //   navigation.navigate("Home", {
+                //     screen: "Posts",
+                //     params: { userId: `${state.email}` },
+                //   });
+                // }}
               >
                 <Text
                   style={[

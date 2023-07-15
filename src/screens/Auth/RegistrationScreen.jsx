@@ -17,6 +17,12 @@ import validator from "validator";
 import background from "../../../assets/images/background.jpg";
 import add from "../../../assets/images/add.png";
 import { useNavigation } from "@react-navigation/native";
+import {
+  authSignInUser,
+  authSignUpUser,
+  authSignOutUser,
+} from "../../../Redux/Auth/authOperations";
+import { useDispatch } from "react-redux";
 
 const initialState = {
   name: "",
@@ -25,8 +31,8 @@ const initialState = {
 };
 
 export default RegistrationScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  // const [isValidEmail, setIsValidEmail] = useState(false);
   const [secureText, setSecureText] = useState(true);
   const [isFocusedInput, setIsFocusedInput] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -50,7 +56,7 @@ export default RegistrationScreen = () => {
   //   setIsValidEmail(email);
   // };
   const keyboardHide = () => {
-    if (!isValid && state.email.length > 0) return;
+    // if (!isValid && state.email.length > 0) return;
     setIsShowKeyboard(false);
     Keyboard.dismiss();
 
@@ -59,6 +65,14 @@ export default RegistrationScreen = () => {
     //   setState(initialState);
     // }
   };
+  const handleSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+
+    dispatch(authSignUpUser(state));
+    setState(initialState);
+  };
+
   const handleFocus = (key) => {
     setIsShowKeyboard(true);
     setIsFocusedInput(key);
@@ -169,13 +183,14 @@ export default RegistrationScreen = () => {
                 ]}
                 activeOpacity={0.8}
                 disabled={!isValid}
-                // onPress={keyboardHide}
-                onPress={() => {
-                  navigation.navigate("Home", {
-                    screen: "Posts",
-                    params: { userId: `${state.email}` },
-                  });
-                }}
+                onPress={handleSubmit}
+                // onPress={() => {
+                //   console.log(state);
+                //   navigation.navigate("Home", {
+                //     screen: "Posts",
+                //     params: { userId: `${state.email}` },
+                //   });
+                // }}
               >
                 <Text
                   style={[

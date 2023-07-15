@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -6,13 +6,17 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   TextInput,
+  Image,
 } from "react-native";
 import { Camera } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
-import { Image } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+import { db, storage } from "../../../firebase/config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 export default function CreatePostScreen() {
   const navigation = useNavigation();
@@ -21,22 +25,10 @@ export default function CreatePostScreen() {
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photo, setPhoto] = useState("");
-  const takePhoto = async () => {
-    if (cameraRef) {
-      const { uri } = await cameraRef.takePictureAsync();
-      await MediaLibrary.createAssetAsync(uri);
-      setPhoto(uri);
-      setIsPhotoTaken(true);
-    }
-    // const photo = await Camera.takePictureAsync();
-    const location = await Location.getCurrentPositionAsync();
-    // console.log("location", location);
-    console.log("latitude", location.coords.latitude);
-    console.log("longitude", location.coords.longitude);
-  };
-  const sendPhoto = () => {
-    navigation.navigate("DefaultPosts", { photo });
-  };
+  const [comment, setComment] = useState("");
+  const [location, setLocation] = useState(null);
+
+  const { userId, name } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -49,15 +41,87 @@ export default function CreatePostScreen() {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log("status", status);
+      // console.log("status", status);
 
       if (status !== "granted") {
+        console.log("Permission to access location was denied");
         setErrorMsg("Permission to access location was denied");
         return;
       }
     })();
   }, []);
 
+  const takePhoto = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    console.log("comment", comment);
+    console.log("location", location);
+    if (cameraRef) {
+      const { uri } = await cameraRef.takePictureAsync();
+      await MediaLibrary.createAssetAsync(uri);
+      setPhoto(uri);
+      setIsPhotoTaken(true);
+    }
+  };
+
+  const uploadPostToServer = async () => {
+    try {
+      const photo = await uploadPhotoToServer();
+      const docRef = await addDoc(collection(db, "posts"), {
+        photo,
+        comment,
+        location: location.coords,
+        userId,
+        name,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+  const uploadPhotoToServer = async () => {
+    try {
+      // Створіть посилання на об'єкт зображення в Firebase Storage
+      const uniquePostId = Date.now().toString();
+
+      // const fileName = "MyPhoto.png";
+
+      const storageRef = ref(storage, `PostImage/${uniquePostId}`);
+      const response = await fetch(photo);
+      const blob = await response.blob();
+      // Відправте зображення на сервер Firebase Storage
+      await uploadBytes(storageRef, blob);
+      // console.log("Зображення успішно відправлено!");
+
+      const downloadURL = await getDownloadURL(storageRef);
+      return downloadURL;
+      // console.log("downloadURL", downloadURL);
+      // Поверніть URL-адресу зображення або інші дані, які вам потрібні
+    } catch (error) {
+      console.error("Помилка під час відправки зображення:", error);
+      // Обробка помилки
+    }
+  };
+
+  // const uploadPhotoToServer = async () => {
+  //   console.log("photo", photo);
+  //   const response = await fetch(photo);
+  //   console.log("response", response);
+  //   // ! певодім фотографию в формат blob()(ето нужно для файрбейс)
+  //   const file = await response.blob();
+  //   console.log("file", file);
+  //   const uniquePostId = nanoid();
+
+  //   // // db;
+  //   const data = await storage().ref(`postImage/${uniquePostId}`).put(file);
+  //   console.log("data", data);
+  // };
+
+  const sendPhoto = () => {
+    uploadPostToServer();
+    navigation.navigate("DefaultPosts");
+  };
   if (hasPermission === null) {
     return <View />;
   }
@@ -115,7 +179,8 @@ export default function CreatePostScreen() {
           <TextInput
             style={styles.input}
             placeholder="     Місцевість"
-            onChangeText={(value) => {}}
+            onChangeText={setComment}
+            // inlineImageLeft="location-outline"
           />
         </View>
 

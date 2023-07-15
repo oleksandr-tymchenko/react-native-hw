@@ -8,12 +8,18 @@ import { useNavigation } from "@react-navigation/native";
 import CommentsScreen from "../NestedScreens/CommentsScreen";
 import MapScreen from "../NestedScreens/MapScreen";
 import DefaultPostsScreen from "../NestedScreens/DefaultPostsScreen";
-import CreatePostScreen from "./CreatePostScreen";
+import { useDispatch } from "react-redux";
+import { authSignOutUser } from "../../../Redux/Auth/authOperations";
+// import CreatePostScreen from "./CreatePostScreen";
 
 const nestedStack = createStackNavigator();
 
 const PostsScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
   return (
     <nestedStack.Navigator initialRouteName="DefaultPosts">
       <nestedStack.Screen
@@ -28,10 +34,7 @@ const PostsScreen = () => {
               <TouchableOpacity
                 style={{ marginRight: 10 }}
                 activeOpacity={0.8}
-                // onPress={keyboardHide}
-                onPress={() => {
-                  navigation.navigate("Login");
-                }}
+                onPress={signOut}
               >
                 <Ionicons
                   name={"log-out-outline"}
@@ -48,11 +51,13 @@ const PostsScreen = () => {
         name="Map"
         component={MapScreen}
         // options={{ headerShown: false }}
+        options={{ tabBarVisible: false }}
       />
       <nestedStack.Screen
         name="Comments"
         component={CommentsScreen}
         // options={{ headerShown: false }}
+        options={{ tabBarVisible: false }}
       />
     </nestedStack.Navigator>
   );

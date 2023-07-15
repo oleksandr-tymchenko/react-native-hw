@@ -10,17 +10,41 @@ import {
 import user from "../../../assets/images/User.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebase/config";
 
 const DefaultPostsScreen = ({ route }) => {
   const navigation = useNavigation();
-  // const route = useRoute();
   const [posts, setPosts] = useState([]);
-  useEffect(() => {
-    if (route.params) {
-      setPosts((pevState) => [...pevState, route.params]);
+  const getAllPosts = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "posts"));
+      // const data = [...snapshot];
+
+      console.log(" snapshot", snapshot);
+      // Перевіряємо у консолі отримані дані
+      snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
+      // Повертаємо масив обʼєктів у довільній формі
+      return snapshot.map((doc) => ({ data: doc.data(), id: doc.id }));
+      // setPosts(newData);
+    } catch (error) {
+      console.log(error);
+      throw error;
     }
-  }, [route.params]);
+  };
+  // const route = useRoute();
+
+  // useEffect(() => {
+  //   if (route.params) {
+  //     setPosts((pevState) => [...pevState, route.params]);
+  //   }
+  // }, [route.params]);
   //   console.log("posts", posts);
+  // * рефакторим юсеффект
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.userWrap}>
