@@ -7,6 +7,8 @@ import { authSignOutUser } from "../../../Redux/Auth/authOperations";
 import { useDispatch } from "react-redux";
 
 const ProfileScreen = () => {
+  const getUserPosts = async () => {};
+  useEffect(() => {}, []);
   // const dispatch = useDispatch();
   // const signOut = () => {
   //   dispatch(authSignOutUser());

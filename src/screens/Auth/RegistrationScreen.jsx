@@ -25,7 +25,7 @@ import {
 import { useDispatch } from "react-redux";
 
 const initialState = {
-  name: "",
+  nickName: "",
   email: "",
   password: "",
 };
@@ -40,8 +40,8 @@ export default RegistrationScreen = () => {
   const [isValid, setIsValid] = useState(false);
 
   const validateForm = () => {
-    const { name, email, password } = state;
-    const isValidName = name.trim().length >= 4;
+    const { nickName, email, password } = state;
+    const isValidName = nickName.trim().length >= 4;
     const isValidEmail = validator.isEmail(email);
     const isValidPassword = password.trim().length >= 8;
     // const isValidPassword = validator.isAlphanumeric(password)
@@ -49,7 +49,7 @@ export default RegistrationScreen = () => {
   };
   useEffect(() => {
     validateForm();
-  }, [state.name, state.email, state.password]);
+  }, [state.nickName, state.email, state.password]);
   // const validEmail = (value) => {
   //   const email = validator.isEmail(value);
 
@@ -114,12 +114,12 @@ export default RegistrationScreen = () => {
                   placeholder="Логін"
                   onFocus={() => handleFocus("input1")}
                   onBlur={handleBlur}
-                  value={state.name}
+                  value={state.nickName}
                   onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, name: value }))
+                    setState((prevState) => ({ ...prevState, nickName: value }))
                   }
                 />
-                {state.name.length > 0 && state.name.length < 4 && (
+                {state.nickName.length > 0 && state.nickName.length < 4 && (
                   <Text style={{ color: `#ff0000` }}>
                     Логін має містити не менше 4 символів
                   </Text>

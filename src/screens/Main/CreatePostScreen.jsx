@@ -28,7 +28,7 @@ export default function CreatePostScreen() {
   const [comment, setComment] = useState("");
   const [location, setLocation] = useState(null);
 
-  const { userId, name } = useSelector((state) => state.auth);
+  const { userId, nickName } = useSelector((state) => state.auth);
 
   useEffect(() => {
     (async () => {
@@ -72,7 +72,7 @@ export default function CreatePostScreen() {
         comment,
         location: location.coords,
         userId,
-        name,
+        nickName,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {

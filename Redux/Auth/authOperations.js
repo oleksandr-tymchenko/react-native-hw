@@ -12,7 +12,7 @@ import { authSlice } from "./authReducer";
 const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
 
 const authSignUpUser =
-  ({ email, password, name }) =>
+  ({ email, password, nickName }) =>
   async (dispatch, getState) => {
     // console.log("email, password, name", email, password, name);
     try {
@@ -23,12 +23,12 @@ const authSignUpUser =
       const user = auth.currentUser;
       console.log("user", user);
       await updateProfile(user, {
-        displayName: name,
+        displayName: nickName,
       });
       // далі процедура після оновлення
       const { uid, displayName } = auth.currentUser;
 
-      const userUpdateProfile = { userId: uid, name: displayName };
+      const userUpdateProfile = { userId: uid, nickName: displayName };
       // console.log("uid, displayName", uid, displayName);
       dispatch(updateUserProfile(userUpdateProfile));
       //   const user = await db
@@ -37,7 +37,7 @@ const authSignUpUser =
       // console.log("user", user);
     } catch (error) {
       console.log("error", error);
-      console.log("error.messae", error.messae);
+      console.log("error.message", error.message);
     }
   };
 
@@ -61,7 +61,10 @@ const authSignOutUser = () => async (dispatch, getState) => {
 const authStateChangeUser = () => async (dispatch, getState) => {
   await onAuthStateChanged(auth, (user) => {
     if (user) {
-      const userUpdateProfile = { userId: user.uid, name: user.displayName };
+      const userUpdateProfile = {
+        userId: user.uid,
+        nickName: user.displayName,
+      };
 
       dispatch(updateUserProfile(userUpdateProfile));
       dispatch(authStateChange({ stateChange: true }));

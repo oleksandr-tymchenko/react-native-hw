@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { Text, View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-const MapScreen = () => {
+const MapScreen = ({ route }) => {
+  console.log("route.params.location", route.params.location);
+  const { latitude, longitude, latitudeDelta, longitudeDelta } =
+    route.params.location;
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       // Виклик створення карти після завершення макету
@@ -17,16 +20,13 @@ const MapScreen = () => {
       <MapView
         style={styles.mapStyle}
         initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0022,
-          longitudeDelta: 0.00421,
+          latitude,
+          longitude,
+          // latitudeDelta: 0.0022,
+          // longitudeDelta: 0.00421,
         }}
       >
-        <Marker
-          coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
-          title="travel photo"
-        />
+        <Marker coordinate={{ latitude, longitude }} title="travel photo" />
       </MapView>
     </View>
   );

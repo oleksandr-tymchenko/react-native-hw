@@ -16,7 +16,7 @@ const nestedStack = createStackNavigator();
 
 const PostsScreen = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const signOut = () => {
     dispatch(authSignOutUser());
   };
@@ -51,13 +51,13 @@ const PostsScreen = () => {
         name="Map"
         component={MapScreen}
         // options={{ headerShown: false }}
-        options={{ tabBarVisible: false }}
+        // options={{ tabBarVisible: false }}
       />
       <nestedStack.Screen
         name="Comments"
         component={CommentsScreen}
         // options={{ headerShown: false }}
-        options={{ tabBarVisible: false }}
+        // options={{ tabBarVisible: false }}
       />
     </nestedStack.Navigator>
   );

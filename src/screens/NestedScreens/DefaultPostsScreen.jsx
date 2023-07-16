@@ -18,21 +18,17 @@ const DefaultPostsScreen = ({ route }) => {
   const [posts, setPosts] = useState([]);
   const getAllPosts = async () => {
     try {
-      const snapshot = await getDocs(collection(db, "posts"));
-      // const data = [...snapshot];
+      const postsData = await getDocs(collection(db, "posts"));
 
-      console.log(" snapshot", snapshot);
       // Перевіряємо у консолі отримані дані
-      snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-      // Повертаємо масив обʼєктів у довільній формі
-      setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      // setPosts(newData);
+      // snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
+      // Записуємо масив обʼєктів у стейт
+      setPosts(postsData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     } catch (error) {
       console.log(error);
       throw error;
     }
   };
-  // const route = useRoute();
 
   // useEffect(() => {
   //   if (route.params) {
@@ -75,12 +71,14 @@ const DefaultPostsScreen = ({ route }) => {
               style={{
                 flexDirection: "row",
                 alignSelf: "flex-start",
-                justifyContent: "space-between",
+                // justifyContent: "space-between",
               }}
             >
               <TouchableOpacity
                 style={styles.navLink}
-                onPress={() => navigation.navigate("Comments")}
+                onPress={() =>
+                  navigation.navigate("Comments", { postId: item.id })
+                }
                 activeOpacity={0.5}
               >
                 <Ionicons
@@ -93,7 +91,11 @@ const DefaultPostsScreen = ({ route }) => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ ...styles.navLink, marginLeft: 48 }}
-                onPress={() => navigation.navigate("Map")}
+                onPress={() =>
+                  navigation.navigate("Map", {
+                    location: item.location,
+                  })
+                }
                 activeOpacity={0.5}
               >
                 <Ionicons
