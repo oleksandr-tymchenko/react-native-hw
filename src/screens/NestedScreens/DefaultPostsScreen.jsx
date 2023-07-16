@@ -25,7 +25,7 @@ const DefaultPostsScreen = ({ route }) => {
       // Перевіряємо у консолі отримані дані
       snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
       // Повертаємо масив обʼєктів у довільній формі
-      return snapshot.map((doc) => ({ data: doc.data(), id: doc.id }));
+      setPosts(snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
       // setPosts(newData);
     } catch (error) {
       console.log(error);
