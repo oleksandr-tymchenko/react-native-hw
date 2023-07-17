@@ -12,9 +12,11 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
+import { useSelector } from "react-redux";
 
 const DefaultPostsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { nickName, email } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
   const getAllPosts = async () => {
     const postsData = await onSnapshot(
@@ -25,28 +27,11 @@ const DefaultPostsScreen = ({ route }) => {
           id: doc.id,
         }));
         setPosts(comments);
+        // console.log("posts", posts);
       }
     );
-    return postsData;
-    // try {
-    //   const postsData = await getDocs(collection(db, "posts"));
-
-    //   // Перевіряємо у консолі отримані дані
-    //   // snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-    //   // Записуємо масив обʼєктів у стейт
-    //   setPosts(postsData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    // } catch (error) {
-    //   console.log(error);
-    //   throw error;
-    // }
   };
 
-  // useEffect(() => {
-  //   if (route.params) {
-  //     setPosts((pevState) => [...pevState, route.params]);
-  //   }
-  // }, [route.params]);
-  //   console.log("posts", posts);
   // * рефакторим юсеффект
   useEffect(() => {
     getAllPosts();
@@ -57,8 +42,8 @@ const DefaultPostsScreen = ({ route }) => {
       <View style={styles.userWrap}>
         <Image style={styles.userImg} source={user} />
         <View>
-          <Text style={styles.userName}>Nataly Shevchenko</Text>
-          <Text style={styles.userEmail}>email@google.com</Text>
+          <Text style={styles.userName}>{nickName}</Text>
+          {/* <Text style={styles.userEmail}>{email}</Text> */}
         </View>
       </View>
       <FlatList
@@ -69,15 +54,17 @@ const DefaultPostsScreen = ({ route }) => {
             style={{
               marginTop: 32,
               marginBottom: 10,
-              justifyContent: "center",
-              alignItems: "center",
+              // justifyContent: "center",
+              // alignItems: "center",
             }}
           >
             <Image
               source={{ uri: item.photo }}
-              style={{ width: 380, height: 200, borderRadius: 8 }}
+              style={{ width: 360, height: 200, borderRadius: 8 }}
             />
-
+            <Text syle={{ fontFamily: "Roboto-Medium", fontSize: 16 }}>
+              {item.photoName}
+            </Text>
             <View
               style={{
                 flexDirection: "row",
@@ -116,7 +103,7 @@ const DefaultPostsScreen = ({ route }) => {
                 {/* <Text style={styles.navLinkText}>
           Немає акаунту? <Text style={{ color: `#0000cd` }}>Map</Text>
         </Text> */}
-                <Text>Ivano-Frankivs'k Region, Ukraine</Text>
+                <Text>{item.placeMarker}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -133,14 +120,13 @@ styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
     backgroundColor: "#FFFFFF",
-    // backgroundColor: "white",
-    // alignItems: "flex-start",
+    paddingTop: 32,
   },
   userWrap: {
     flexDirection: "row",
-    // justifyContent:'space-between'
-    marginTop: 20,
-    // alignItems: "center",
+    // justifyContent: "center",
+    paddingBottom: 10,
+    alignItems: "center",
   },
   // userInfo: {
   //   flexDirection: "column",
@@ -161,16 +147,5 @@ styles = StyleSheet.create({
   navLink: {
     flexDirection: "row",
     marginTop: 16,
-    // marginLeft: 16,
-    // alignItems: "center",
-    // alignItems: 'flex-start',
   },
-  // navLinkText: {
-  //   color: "#1B4371",
-  //   textAlign: "center",
-  //   fontSize: 16,
-  //   justifyContent: "center",
-
-  //   fontFamily: "Roboto-Regular",
-  // },
 });

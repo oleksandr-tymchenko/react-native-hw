@@ -6,14 +6,6 @@ import { store } from "./Redux/Store";
 import Main from "./Components/Main";
 
 export default function App() {
-  // onAuthStateChanged((credentials) => console.log("user change", credentials));
-  // const authStateChanged = async (onChange = () => {}) => {
-  //   onAuthStateChanged((user) => {
-  //     onChange(user);
-  //     console.log("onChange user", user);
-  //   });
-  // };
-  // authStateChanged();
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -23,7 +15,6 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
-
   return (
     <Provider store={store}>
       <Main />

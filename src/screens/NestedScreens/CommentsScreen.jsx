@@ -6,18 +6,22 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
-import { TouchableOpacity } from "react-native";
 
 import {
   Text,
   View,
   StyleSheet,
-  TextInput,
   SafeAreaView,
   FlatList,
+  TextInput,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { db } from "../../../firebase/config";
+import { db, storage } from "../../../firebase/config";
+// import { Button, TextInput, TouchableOpacity } from "react-native-paper";
+import { Ionicons } from "@expo/vector-icons";
+// import { getDownloadURL, ref } from "firebase/storage";
 
 // import {  } from "react-native-gesture-handler";
 
@@ -27,7 +31,17 @@ const CommentsScreen = ({ route }) => {
   const [allComments, setAllComments] = useState([]);
   const { postId } = route.params;
   const { nickName } = useSelector((state) => state.auth);
+  const [photoUrl, setPhotoUrl] = useState(null);
 
+  const getPhotoFromFirestore = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    const post = querySnapshot.docs.find((doc) => doc.id === postId);
+    setPhotoUrl(post.data().photo);
+  };
+
+  useEffect(() => {
+    getPhotoFromFirestore();
+  }, []);
   const createPost = async () => {
     try {
       const docRef = await addDoc(collection(db, "posts", postId, "comments"), {
@@ -54,21 +68,6 @@ const CommentsScreen = ({ route }) => {
     );
 
     return postsData;
-    // try {
-    //   const postsData = await getDocs(
-    //     collection(db, "posts", postId, "comments")
-    //   );
-    //   console.log("postsData", postsData.docs);
-    //   // Перевіряємо у консолі отримані дані
-    //   // snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-    //   // Записуємо масив обʼєктів у стейт
-    //   setAllComments(
-    //     postsData.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    //   throw error;
-    // }
   };
 
   useEffect(() => {
@@ -80,48 +79,69 @@ const CommentsScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
+      <Image
+        source={{ uri: photoUrl }}
+        style={{
+          width: "auto",
+          height: 240,
+          borderRadius: 8,
+          marginHorizontal: 16,
+        }}
+      />
       <SafeAreaView style={styles.container}>
         <FlatList
+          contentContainerStyle={{ alignItems: "flex-end" }}
           data={allComments}
           renderItem={({ item }) => (
-            <View style={styles.commentContainer}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 24,
+                marginRight: 16,
+              }}
+            >
               <Text>{item.nickName}</Text>
-              <Text>{item.comment}</Text>
+
+              <View style={styles.commentContainer}>
+                <Text>{item.comment}</Text>
+              </View>
             </View>
           )}
           keyExtractor={(item) => item.id}
         />
       </SafeAreaView>
-      <View>
+      <View style={styles.inputContainer}>
         <TextInput
+          multiline={true}
+          numberOfLines={10}
           style={styles.input}
           placeholder="Коментувати..."
           onChangeText={setComment}
         />
-      </View>
 
-      <TouchableOpacity
-        style={styles.onPublicBtn}
-        // style={[
-        //   styles.onPublicBtn,
-        //   { backgroundColor: !isPhotoTaken ? "#F6F6F6" : "#FF6C00" },
-        // ]}
-        activeOpacity={0.8}
-        // onPress={keyboardHide}
-        onPress={createPost}
-        // disabled={!isPhotoTaken}
-      >
-        <Text
-          style={[
-            styles.onPublicBtnTitle,
-            {
-              color: !isPhotoTaken ? "#BDBDBD" : "#FFFFFF",
-            },
-          ]}
+        <TouchableOpacity
+          style={styles.onPublicBtn}
+          // style={[
+          //   styles.onPublicBtn,
+          //   { backgroundColor: !isPhotoTaken ? "#F6F6F6" : "#FF6C00" },
+          // ]}
+          activeOpacity={0.8}
+          // onPress={keyboardHide}
+          onPress={createPost}
+          // disabled={!isPhotoTaken}
         >
-          Коментувати...
-        </Text>
-      </TouchableOpacity>
+          <Ionicons style={styles.onPublicBtnIcon} name="arrow-up-outline" />
+          {/* <Text
+            style={[
+              styles.onPublicBtnTitle,
+              {
+                color: !isPhotoTaken ? "#BDBDBD" : "#FFFFFF",
+              },
+            ]}
+          > */}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -129,48 +149,63 @@ const CommentsScreen = ({ route }) => {
 styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     paddingTop: 32,
     paddingBottom: 20,
     // justifyContent: "flex-end",
-    // // alignItems: "center",
+    // alignItems: "center",
     backgroundColor: "#fff",
   },
   commentContainer: {
+    alignSelf: "flex-end",
     backgroundColor: "#E8E8E8",
     borderRadius: 6,
     borderTopLeftRadius: 0,
-    marginLeft: 16,
-    marginBottom: 24,
+    marginLeft: 5,
+    // flexGrow: 1,
+    width: 299,
+    padding: 16,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    marginHorizontal: 16,
   },
   input: {
+    flex: 1,
+
     borderColor: "transparent",
-    borderBottomColor: "#f0f8ff",
-    padding: 10,
-    borderWidth: 1,
-
-    // borderRadius: 5,
+    borderRadius: 100,
+    paddingLeft: 15,
+    paddingRight: 50,
     height: 50,
+    // borderWidth: 1,
+    backgroundColor: "#E8E8E8",
+    // borderRadius: 5,
 
+    fontFamily: "Roboto-Regular",
     color: "#212121",
     // backgroundColor: "#E8E8E8",
   },
   onPublicBtn: {
-    height: 50,
+    position: "absolute",
+    top: 8,
+    right: 10,
+    height: 34,
+    width: 34,
     borderRadius: 100,
-    marginTop: 43,
-    padding: 15,
+
     backgroundColor: "#FF6C00",
-    // alignItems: "center",
-    // justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  onPublicBtnTitle: {
-    // color: "#FFFFFF",
-    fontSize: 16,
-    fontFamily: "Roboto-Regular",
-    // alignItems: "center",
-    // justifyContent: "center",
+  onPublicBtnIcon: {
+    color: "#FFFFFF",
+
     alignSelf: "center",
+    fontSize: 20,
+    flexWrap: "wrap",
   },
 });
 export default CommentsScreen;

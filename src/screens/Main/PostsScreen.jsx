@@ -25,7 +25,6 @@ const PostsScreen = () => {
       <nestedStack.Screen
         name="DefaultPosts"
         component={DefaultPostsScreen}
-        // options={{ headerShown: false }}
         options={{
           title: "Публікації",
           headerStyle: { borderBottomColor: "#BDBDBD", borderWidth: 1 },

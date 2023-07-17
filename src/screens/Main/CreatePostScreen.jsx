@@ -25,7 +25,7 @@ export default function CreatePostScreen() {
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photo, setPhoto] = useState("");
-  const [comment, setComment] = useState("");
+  const [photoName, setPhotoName] = useState("");
   const [placeMarker, setPlaceMarker] = useState("");
   const [location, setLocation] = useState(null);
 
@@ -55,7 +55,7 @@ export default function CreatePostScreen() {
   const takePhoto = async () => {
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
-    console.log("comment", comment);
+    console.log("photoName", photoName);
     console.log("placeMarker", placeMarker);
     console.log("location", location);
     if (cameraRef) {
@@ -72,7 +72,7 @@ export default function CreatePostScreen() {
       const docRef = await addDoc(collection(db, "posts"), {
         photo,
         placeMarker,
-        comment,
+        photoName,
         location: location.coords,
         userId,
         nickName,
@@ -175,7 +175,7 @@ export default function CreatePostScreen() {
           <TextInput
             style={styles.input}
             placeholder="...Назва"
-            onChangeText={setComment}
+            onChangeText={setPhotoName}
           />
         </View>
         <View style={{ marginTop: 16, position: "relative" }}>
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 80,
+    marginTop: 50,
   },
 });
 

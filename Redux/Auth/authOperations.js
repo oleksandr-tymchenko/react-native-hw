@@ -28,13 +28,11 @@ const authSignUpUser =
       // далі процедура після оновлення
       const { uid, displayName } = auth.currentUser;
 
-      const userUpdateProfile = { userId: uid, nickName: displayName };
-      // console.log("uid, displayName", uid, displayName);
+      const userUpdateProfile = {
+        userId: uid,
+        nickName: displayName,
+      };
       dispatch(updateUserProfile(userUpdateProfile));
-      //   const user = await db
-      //     .auth()
-      //     .createUserWithEmailAndPassword(email, password);
-      // console.log("user", user);
     } catch (error) {
       console.log("error", error);
       console.log("error.message", error.message);
@@ -46,7 +44,7 @@ const authSignInUser =
   async (dispatch, getState) => {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log("user", user);
+      // console.log("user", user);
       //   return credentials.user;
     } catch (error) {
       console.log("error.code", error.code);

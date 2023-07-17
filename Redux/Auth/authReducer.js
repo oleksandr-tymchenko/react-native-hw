@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const state = {
   userId: null,
   nickName: null,
+
   stateChange: null,
 };
 
