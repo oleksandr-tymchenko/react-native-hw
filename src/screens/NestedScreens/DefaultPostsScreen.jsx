@@ -10,24 +10,35 @@ import {
 import user from "../../../assets/images/User.jpg";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
 
 const DefaultPostsScreen = ({ route }) => {
   const navigation = useNavigation();
   const [posts, setPosts] = useState([]);
   const getAllPosts = async () => {
-    try {
-      const postsData = await getDocs(collection(db, "posts"));
+    const postsData = await onSnapshot(
+      collection(db, "posts"),
+      (queryPosts) => {
+        const comments = queryPosts.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setPosts(comments);
+      }
+    );
+    return postsData;
+    // try {
+    //   const postsData = await getDocs(collection(db, "posts"));
 
-      // Перевіряємо у консолі отримані дані
-      // snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-      // Записуємо масив обʼєктів у стейт
-      setPosts(postsData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    //   // Перевіряємо у консолі отримані дані
+    //   // snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
+    //   // Записуємо масив обʼєктів у стейт
+    //   setPosts(postsData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    // } catch (error) {
+    //   console.log(error);
+    //   throw error;
+    // }
   };
 
   // useEffect(() => {

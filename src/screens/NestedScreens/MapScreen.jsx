@@ -5,15 +5,15 @@ const MapScreen = ({ route }) => {
   console.log("route.params.location", route.params.location);
   const { latitude, longitude, latitudeDelta, longitudeDelta } =
     route.params.location;
-  useEffect(() => {
-    const timeOutId = setTimeout(() => {
-      // Виклик створення карти після завершення макету
-      // Код картографії
-    }, 0);
-    return () => {
-      clearTimeout(timeOutId);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const timeOutId = setTimeout(() => {
+  //     // Виклик створення карти після завершення макету
+  //     // Код картографії
+  //   }, 0);
+  //   return () => {
+  //     clearTimeout(timeOutId);
+  //   };
+  // }, []);
   return (
     <View style={styles.container}>
       {/* <Text>Map</Text> */}

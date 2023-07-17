@@ -42,17 +42,18 @@ const CommentsScreen = ({ route }) => {
   };
   const getAllPosts = async () => {
     // використ метод onSnapShot для моментального отримання даних
-    const unsubscribe = await onSnapshot(
+    const postsData = await onSnapshot(
       collection(db, "posts", postId, "comments"),
-      (querySnapshot) => {
-        const comments = querySnapshot.docs.map((doc) => ({
+      (queryPosts) => {
+        const comments = queryPosts.docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
         }));
         setAllComments(comments);
       }
     );
-    return unsubscribe;
+
+    return postsData;
     // try {
     //   const postsData = await getDocs(
     //     collection(db, "posts", postId, "comments")

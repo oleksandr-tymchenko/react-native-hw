@@ -26,6 +26,7 @@ export default function CreatePostScreen() {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photo, setPhoto] = useState("");
   const [comment, setComment] = useState("");
+  const [placeMarker, setPlaceMarker] = useState("");
   const [location, setLocation] = useState(null);
 
   const { userId, nickName } = useSelector((state) => state.auth);
@@ -45,7 +46,7 @@ export default function CreatePostScreen() {
 
       if (status !== "granted") {
         console.log("Permission to access location was denied");
-        setErrorMsg("Permission to access location was denied");
+        // setErrorMsg("Permission to access location was denied");
         return;
       }
     })();
@@ -55,6 +56,7 @@ export default function CreatePostScreen() {
     let location = await Location.getCurrentPositionAsync({});
     setLocation(location);
     console.log("comment", comment);
+    console.log("placeMarker", placeMarker);
     console.log("location", location);
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
@@ -69,6 +71,7 @@ export default function CreatePostScreen() {
       const photo = await uploadPhotoToServer();
       const docRef = await addDoc(collection(db, "posts"), {
         photo,
+        placeMarker,
         comment,
         location: location.coords,
         userId,
@@ -172,14 +175,14 @@ export default function CreatePostScreen() {
           <TextInput
             style={styles.input}
             placeholder="...Назва"
-            onChangeText={(value) => {}}
+            onChangeText={setComment}
           />
         </View>
         <View style={{ marginTop: 16, position: "relative" }}>
           <TextInput
             style={styles.input}
             placeholder="     Місцевість"
-            onChangeText={setComment}
+            onChangeText={setPlaceMarker}
             // inlineImageLeft="location-outline"
           />
         </View>
