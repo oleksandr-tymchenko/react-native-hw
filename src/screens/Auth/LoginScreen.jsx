@@ -18,6 +18,7 @@ import background from "../../../assets/images/background.jpg";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
 import { authSignInUser } from "../../../Redux/Auth/authOperations";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 const initialState = {
   email: "",
@@ -46,14 +47,9 @@ export default LoginScreen = () => {
   }, [state.email, state.password]);
 
   const keyboardHide = () => {
-    // if (!isValid && state.email.length > 0) return;
-
     setIsShowKeyboard(false);
 
     Keyboard.dismiss();
-    // // if (state !== initialState) {
-    // //   setState(initialState);
-    // // }
   };
   const handleSubmit = () => {
     setIsShowKeyboard(false);
@@ -72,11 +68,11 @@ export default LoginScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View style={GlobalStyles.container}>
         <ImageBackground
           source={background}
           resizeMode="cover"
-          style={styles.image}
+          style={styles.backgroundImg}
         >
           <View
             style={{
@@ -171,7 +167,7 @@ export default LoginScreen = () => {
                 activeOpacity={0.8}
               >
                 <Text style={styles.navLinkText}>
-                  Немає акаунту?{" "}
+                  Немає акаунту?
                   <Text style={{ color: `#0000cd` }}>Зареєструватися</Text>
                 </Text>
               </TouchableOpacity>
@@ -184,11 +180,11 @@ export default LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  image: {
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  // },
+  backgroundImg: {
     flex: 1,
     // resizeMode: "cover",
     justifyContent: "flex-end",

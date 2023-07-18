@@ -23,6 +23,7 @@ import {
   authSignOutUser,
 } from "../../../Redux/Auth/authOperations";
 import { useDispatch } from "react-redux";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 const initialState = {
   nickName: "",
@@ -83,11 +84,11 @@ export default RegistrationScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
+      <View style={GlobalStyles.container}>
         <ImageBackground
           source={background}
           resizeMode="cover"
-          style={styles.image}
+          style={styles.backgroundImg}
         >
           <View
             style={{
@@ -222,11 +223,11 @@ export default RegistrationScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  image: {
+  // container: {
+  //   flex: 1,
+  //   backgroundColor: "#fff",
+  // },
+  backgroundImg: {
     flex: 1,
     // resizeMode: "cover",
     justifyContent: "flex-end",

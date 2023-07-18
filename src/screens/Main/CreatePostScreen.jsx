@@ -7,16 +7,19 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Image,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Camera } from "expo-camera";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as MediaLibrary from "expo-media-library";
-import { db, storage } from "../../../firebase/config";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useSelector } from "react-redux";
+import { db, storage } from "../../../firebase/config";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 export default function CreatePostScreen() {
   const navigation = useNavigation();
@@ -28,6 +31,7 @@ export default function CreatePostScreen() {
   const [photoName, setPhotoName] = useState("");
   const [placeMarker, setPlaceMarker] = useState("");
   const [location, setLocation] = useState(null);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
 
   const { userId, nickName } = useSelector((state) => state.auth);
 
@@ -131,115 +135,129 @@ export default function CreatePostScreen() {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  const keyboardHide = () => {
+    setIsShowKeyboard(false);
 
+    Keyboard.dismiss();
+  };
   return (
-    <View style={styles.container}>
-      <View style={styles.cameraContainer}>
-        <Camera style={styles.camera} type={type} ref={setCameraRef}>
-          <View style={styles.photoView}>
-            {photo && (
-              <View style={styles.takenPhotoContainer}>
-                <Image
-                  source={{ uri: photo }}
-                  style={{
-                    height: 220,
-                    width: 360,
-                    borderRadius: 10,
-                  }}
-                />
-              </View>
-            )}
-
-            <TouchableOpacity style={styles.takePhotoBtn} onPress={takePhoto}>
-              <View style={styles.takePhotoCont}>
-                <Ionicons
-                  name={"camera-sharp"}
-                  style={{ fontSize: 24, color: "#BDBDBD" }} // Змінити розмір іконки на 30
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </Camera>
-        <TouchableOpacity>
-          {!isPhotoTaken ? (
-            <Text style={styles.cameraTitle}>Завантажте фото</Text>
-          ) : (
-            <Text style={styles.cameraTitle}>Редагувати фото</Text>
-          )}
-        </TouchableOpacity>
-      </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+    <TouchableWithoutFeedback onPress={keyboardHide}>
+      <View
+        style={{
+          ...GlobalStyles.container,
+          paddingHorizontal: 16,
+          paddingTop: 32,
+        }}
       >
-        <View>
-          <TextInput
-            style={styles.input}
-            placeholder="...Назва"
-            onChangeText={setPhotoName}
-          />
-        </View>
-        <View style={{ marginTop: 16, position: "relative" }}>
-          <TextInput
-            style={styles.input}
-            placeholder="     Місцевість"
-            onChangeText={setPlaceMarker}
-            // inlineImageLeft="location-outline"
-          />
-        </View>
+        <View style={styles.cameraContainer}>
+          <Camera style={styles.camera} type={type} ref={setCameraRef}>
+            <View style={styles.photoView}>
+              {photo && (
+                <View style={styles.takenPhotoContainer}>
+                  <Image
+                    source={{ uri: photo }}
+                    style={{
+                      height: 220,
+                      width: 340,
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              )}
 
-        <TouchableOpacity
-          style={[
-            styles.onPublicBtn,
-            { backgroundColor: !isPhotoTaken ? "#F6F6F6" : "#FF6C00" },
-          ]}
-          activeOpacity={0.8}
-          // onPress={keyboardHide}
-          onPress={sendPhoto}
-          disabled={!isPhotoTaken}
+              <TouchableOpacity style={styles.takePhotoBtn} onPress={takePhoto}>
+                <View style={styles.takePhotoCont}>
+                  <Ionicons
+                    name={"camera-sharp"}
+                    style={{ fontSize: 24, color: "#BDBDBD" }} // Змінити розмір іконки на 30
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </Camera>
+          <TouchableOpacity>
+            {!isPhotoTaken ? (
+              <Text style={styles.cameraTitle}>Завантажте фото</Text>
+            ) : (
+              <Text style={styles.cameraTitle}>Редагувати фото</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          <Text
+          <View>
+            <TextInput
+              style={styles.input}
+              placeholder="...Назва"
+              onChangeText={setPhotoName}
+            />
+          </View>
+          <View style={{ marginTop: 16, position: "relative" }}>
+            <TextInput
+              style={styles.input}
+              placeholder="     Місцевість"
+              onChangeText={setPlaceMarker}
+              // inlineImageLeft="location-outline"
+            />
+          </View>
+
+          <TouchableOpacity
             style={[
-              styles.onPublicBtnTitle,
-              {
-                color: !isPhotoTaken ? "#BDBDBD" : "#FFFFFF",
-              },
+              styles.onPublicBtn,
+              { backgroundColor: !isPhotoTaken ? "#F6F6F6" : "#FF6C00" },
             ]}
+            activeOpacity={0.8}
+            // onPress={keyboardHide}
+            onPress={sendPhoto}
+            disabled={!isPhotoTaken}
           >
-            Опублікувати
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={[
+                styles.onPublicBtnTitle,
+                {
+                  color: !isPhotoTaken ? "#BDBDBD" : "#FFFFFF",
+                },
+              ]}
+            >
+              Опублікувати
+            </Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.delPhoto}
-          onPress={() => {}}
-          activeOpacity={0.5}
-        >
-          <Ionicons
-            name={"trash-outline"}
-            style={{ fontSize: 24, color: "#BDBDBD" }}
-          />
-        </TouchableOpacity>
-      </KeyboardAvoidingView>
-    </View>
+          <TouchableOpacity
+            style={styles.delPhoto}
+            onPress={() => {}}
+            activeOpacity={0.5}
+          >
+            <Ionicons
+              name={"trash-outline"}
+              style={{ fontSize: 24, color: "#BDBDBD" }}
+            />
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 32,
-    backgroundColor: "#fff",
-  },
+  // container: {
+  //   flex: 1,
+  // paddingHorizontal: 16,
+  // paddingTop: 32,
+  //   backgroundColor: "#fff",
+  // },
 
   cameraContainer: {
-    height: 267,
+    height: 260,
     marginBottom: 32,
+    // borderRadius: 10,
   },
   camera: {
     // flex: 1,
     height: 240,
     borderRadius: 10,
+    // width: 300
   },
   cameraTitle: {
     marginTop: 8,
@@ -249,6 +267,7 @@ const styles = StyleSheet.create({
   },
   photoView: {
     flex: 1,
+
     // backgroundColor: "transparent",
     justifyContent: "center",
     // borderRadius: 10,

@@ -21,7 +21,7 @@ const PostsScreen = () => {
     dispatch(authSignOutUser());
   };
   return (
-    <nestedStack.Navigator initialRouteName="DefaultPosts">
+    <nestedStack.Navigator>
       <nestedStack.Screen
         name="DefaultPosts"
         component={DefaultPostsScreen}
@@ -49,12 +49,13 @@ const PostsScreen = () => {
       <nestedStack.Screen
         name="Map"
         component={MapScreen}
-        // options={{ headerShown: false }}
+        options={{ title: "Карта" }}
         // options={{ tabBarVisible: false }}
       />
       <nestedStack.Screen
         name="Comments"
         component={CommentsScreen}
+        options={{ title: "Коментарі" }}
         // options={{ headerShown: false }}
         // options={{ tabBarVisible: false }}
       />

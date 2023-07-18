@@ -13,10 +13,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../../../firebase/config";
 import { useSelector } from "react-redux";
+import { GlobalStyles } from "../../../GlobalStyles";
 
 const DefaultPostsScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { nickName, email } = useSelector((state) => state.auth);
+  const { nickName } = useSelector((state) => state.auth);
   const [posts, setPosts] = useState([]);
   const getAllPosts = async () => {
     const postsData = await onSnapshot(
@@ -38,7 +39,14 @@ const DefaultPostsScreen = ({ route }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        ...GlobalStyles.container,
+        paddingHorizontal: 16,
+
+        paddingTop: 32,
+      }}
+    >
       <View style={styles.userWrap}>
         <Image style={styles.userImg} source={user} />
         <View>
@@ -55,12 +63,12 @@ const DefaultPostsScreen = ({ route }) => {
               marginTop: 32,
               marginBottom: 10,
               // justifyContent: "center",
-              // alignItems: "center",
+              alignItems: "center",
             }}
           >
             <Image
               source={{ uri: item.photo }}
-              style={{ width: 360, height: 200, borderRadius: 8 }}
+              style={{ width: 360, height: 240, borderRadius: 8 }}
             />
             <Text syle={{ fontFamily: "Roboto-Medium", fontSize: 16 }}>
               {item.photoName}
@@ -116,12 +124,13 @@ const DefaultPostsScreen = ({ route }) => {
 export default DefaultPostsScreen;
 
 styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 16,
-    backgroundColor: "#FFFFFF",
-    paddingTop: 32,
-  },
+  // postsScreenContainer: {
+  //   flex: 1,
+  //   backgroundColor: "#FFFFFF",
+  paddingHorizontal: 16,
+
+  paddingTop: 32,
+  // },
   userWrap: {
     flexDirection: "row",
     // justifyContent: "center",
@@ -140,10 +149,10 @@ styles = StyleSheet.create({
     fontFamily: "Roboto-Bold",
     fontSize: 13,
   },
-  userEmail: {
-    fontFamily: "Roboto-Regular",
-    fontSize: 11,
-  },
+  // userEmail: {
+  //   fontFamily: "Roboto-Regular",
+  //   fontSize: 11,
+  // },
   navLink: {
     flexDirection: "row",
     marginTop: 16,
