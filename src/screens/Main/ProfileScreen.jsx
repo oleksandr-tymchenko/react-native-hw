@@ -87,7 +87,7 @@ const ProfileScreen = () => {
                   marginTop: 32,
                   marginBottom: 10,
                   // justifyContent: "center",
-                  alignItems: "center",
+                  // alignItems: "center",
                 }}
               >
                 <Image
@@ -100,8 +100,9 @@ const ProfileScreen = () => {
                 <View
                   style={{
                     flexDirection: "row",
-                    alignSelf: "flex-start",
-                    // justifyContent: "space-between",
+                    // alignSelf: "flex-start",
+                    justifyContent: "space-between",
+                    // alignItems: "center",
                   }}
                 >
                   <View

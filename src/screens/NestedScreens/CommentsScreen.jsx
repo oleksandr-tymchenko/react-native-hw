@@ -78,17 +78,19 @@ const CommentsScreen = ({ route }) => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View
         style={{
-          ...GlobalStyles.container,
+          // ...GlobalStyles.container,
           // paddingHorizontal: 16,
 
+          flex: 1,
+          backgroundColor: "#fff",
           paddingTop: 32,
         }}
       >
         <Image
           source={{ uri: photoUrl }}
           style={{
-            width: 360,
-            height: 240,
+            width: "20%",
+            height: "20%",
             borderRadius: 8,
             marginHorizontal: 16,
             marginBottom: 32,
@@ -109,7 +111,18 @@ const CommentsScreen = ({ route }) => {
               >
                 <Text>{item.nickName}</Text>
 
-                <View style={styles.commentContainer}>
+                <View
+                  style={{
+                    alignSelf: "flex-end",
+                    backgroundColor: "#E8E8E8",
+                    borderRadius: 6,
+                    borderTopLeftRadius: 0,
+                    marginLeft: 5,
+                    // flexGrow: 1,
+                    width: 299,
+                    padding: 16,
+                  }}
+                >
                   <Text>{item.comment}</Text>
                 </View>
               </View>
@@ -122,7 +135,14 @@ const CommentsScreen = ({ route }) => {
         >
           <View
             style={{
-              ...styles.inputContainer,
+              // width: "100%",
+              flexDirection: "row",
+              // alignItems: "center",
+              position: "relative",
+
+              marginLeft: 16,
+              marginRight: 16,
+              marginTop: "auto",
               marginBottom: isShowKeyboard ? 60 : 16,
             }}
           >
@@ -130,17 +150,39 @@ const CommentsScreen = ({ route }) => {
               value={comment}
               multiline={true}
               numberOfLines={10}
-              style={styles.input}
+              style={{
+                flex: 1,
+
+                borderColor: "transparent",
+                borderRadius: 100,
+                paddingLeft: 15,
+                paddingRight: 50,
+                height: 50,
+                // borderWidth: 1,
+                backgroundColor: "#E8E8E8",
+
+                fontFamily: "Roboto-Regular",
+                color: "#212121",
+              }}
               placeholder="Коментувати..."
               onChangeText={setComment}
               onFocus={() => setIsShowKeyboard(true)}
             />
 
             <TouchableOpacity
-              style={[
-                styles.onPublicBtn,
-                { backgroundColor: !comment.length ? "#F6F6F6" : "#FF6C00" },
-              ]}
+              style={{
+                position: "absolute",
+                top: 8,
+                right: 10,
+                height: 34,
+                width: 34,
+                borderRadius: 100,
+
+                backgroundColor: "#FF6C00",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: !comment.length ? "#F6F6F6" : "#FF6C00",
+              }}
               // style={[
               //   styles.onPublicBtn,
               //   { backgroundColor: !isPhotoTaken ? "#F6F6F6" : "#FF6C00" },
@@ -150,7 +192,13 @@ const CommentsScreen = ({ route }) => {
               onPress={createPost}
             >
               <Ionicons
-                style={styles.onPublicBtnIcon}
+                style={{
+                  color: "#FFFFFF",
+
+                  alignSelf: "center",
+                  fontSize: 20,
+                  flexWrap: "wrap",
+                }}
                 name="arrow-up-outline"
               />
             </TouchableOpacity>
@@ -162,66 +210,61 @@ const CommentsScreen = ({ route }) => {
 };
 
 styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // paddingHorizontal: 16,
-    // paddingTop: 32,
-    paddingBottom: 20,
-    // justifyContent: "flex-end",
-    // alignItems: "center",
-    backgroundColor: "#fff",
-  },
-  commentContainer: {
-    alignSelf: "flex-end",
-    backgroundColor: "#E8E8E8",
-    borderRadius: 6,
-    borderTopLeftRadius: 0,
-    marginLeft: 5,
-    // flexGrow: 1,
-    width: 299,
-    padding: 16,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    position: "relative",
-    marginHorisonal: 16,
-    marginTop: "auto",
-  },
-  input: {
-    flex: 1,
-
-    borderColor: "transparent",
-    borderRadius: 100,
-    paddingLeft: 15,
-    paddingRight: 50,
-    height: 50,
-    // borderWidth: 1,
-    backgroundColor: "#E8E8E8",
-    // borderRadius: 5,
-
-    fontFamily: "Roboto-Regular",
-    color: "#212121",
-    // backgroundColor: "#E8E8E8",
-  },
-  onPublicBtn: {
-    position: "absolute",
-    top: 8,
-    right: 10,
-    height: 34,
-    width: 34,
-    borderRadius: 100,
-
-    backgroundColor: "#FF6C00",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  onPublicBtnIcon: {
-    color: "#FFFFFF",
-
-    alignSelf: "center",
-    fontSize: 20,
-    flexWrap: "wrap",
-  },
+  // container: {
+  //   flex: 1,
+  //   // paddingHorizontal: 16,
+  //   // paddingTop: 32,
+  //   paddingBottom: 20,
+  //   // justifyContent: "flex-end",
+  //   // alignItems: "center",
+  //   backgroundColor: "#fff",
+  // },
+  // commentContainer: {
+  //   alignSelf: "flex-end",
+  //   backgroundColor: "#E8E8E8",
+  //   borderRadius: 6,
+  //   borderTopLeftRadius: 0,
+  //   marginLeft: 5,
+  //   // flexGrow: 1,
+  //   width: 299,
+  //   padding: 16,
+  // },
+  // inputContainer: {
+  //   flexDirection: "row",
+  //   alignItems: "center",
+  //   position: "relative",
+  //   marginHorisonal: 16,
+  //   marginTop: "auto",
+  // },
+  // input: {
+  //   flex: 1,
+  //   borderColor: "transparent",
+  //   borderRadius: 100,
+  //   paddingLeft: 15,
+  //   paddingRight: 50,
+  //   height: 50,
+  //   // borderWidth: 1,
+  //   backgroundColor: "#E8E8E8",
+  //   fontFamily: "Roboto-Regular",
+  //   color: "#212121",
+  //   // backgroundColor: "#E8E8E8",
+  // },
+  // onPublicBtn: {
+  //   position: "absolute",
+  //   top: 8,
+  //   right: 10,
+  //   height: 34,
+  //   width: 34,
+  //   borderRadius: 100,
+  //   backgroundColor: "#FF6C00",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  // },
+  // onPublicBtnIcon: {
+  //   color: "#FFFFFF",
+  //   alignSelf: "center",
+  //   fontSize: 20,
+  //   flexWrap: "wrap",
+  // },
 });
 export default CommentsScreen;

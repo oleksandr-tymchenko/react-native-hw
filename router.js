@@ -16,8 +16,9 @@ import ProfileScreen from "./src/screens/Main/ProfileScreen";
 const AuthStack = createStackNavigator();
 const MainTab = createBottomTabNavigator();
 
-export const useRoute = (isAuth) => {
+export const chooseRoute = (isAuth) => {
   // const route = useRoute();
+  // console.log("route", route);
   if (!isAuth) {
     return (
       <AuthStack.Navigator>

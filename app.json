@@ -11,22 +11,30 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
-    // "jsEngine": "hermes",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "jsEngine": "hermes",
     "ios": {
-      "supportsTablet": true
-      // "jsEngine": "jsc"
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     },
     "android": {
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
-      // "jsEngine": "jsc"
+      },
+      "jsEngine": "jsc",
+      "package": "com.olexandr_t.AwesomeProject"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "66401398-2063-4571-b3a5-1ba24cb14286"
+      }
     }
   }
 }

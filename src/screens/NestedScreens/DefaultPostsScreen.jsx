@@ -47,8 +47,15 @@ const DefaultPostsScreen = ({ route }) => {
         paddingTop: 32,
       }}
     >
-      <View style={styles.userWrap}>
-        <Image style={styles.userImg} source={user} />
+      <View
+        style={{
+          flexDirection: "row",
+
+          paddingBottom: 10,
+          alignItems: "center",
+        }}
+      >
+        <Image style={{ width: 60, marginRight: 10 }} source={user} />
         <View>
           <Text style={styles.userName}>{nickName}</Text>
           {/* <Text style={styles.userEmail}>{email}</Text> */}
@@ -63,7 +70,7 @@ const DefaultPostsScreen = ({ route }) => {
               marginTop: 32,
               marginBottom: 10,
               // justifyContent: "center",
-              alignItems: "center",
+              // alignItems: "center",
             }}
           >
             <Image
@@ -75,9 +82,10 @@ const DefaultPostsScreen = ({ route }) => {
             </Text>
             <View
               style={{
+                width: "100%",
                 flexDirection: "row",
-                alignSelf: "flex-start",
-                // justifyContent: "space-between",
+                // alignSelf: "flex-start",
+                justifyContent: "space-between",
               }}
             >
               <TouchableOpacity
@@ -124,26 +132,17 @@ const DefaultPostsScreen = ({ route }) => {
 export default DefaultPostsScreen;
 
 styles = StyleSheet.create({
-  // postsScreenContainer: {
-  //   flex: 1,
-  //   backgroundColor: "#FFFFFF",
-  paddingHorizontal: 16,
+  // userWrap: {
+  //   flexDirection: "row",
 
-  paddingTop: 32,
+  //   paddingBottom: 10,
+  //   alignItems: "center",
   // },
-  userWrap: {
-    flexDirection: "row",
-    // justifyContent: "center",
-    paddingBottom: 10,
-    alignItems: "center",
-  },
-  // userInfo: {
-  //   flexDirection: "column",
+
+  // userImg: {
+  //   width: 60,
+  //   marginRight: 10,
   // },
-  userImg: {
-    width: 60,
-    marginRight: 10,
-  },
 
   userName: {
     fontFamily: "Roboto-Bold",
